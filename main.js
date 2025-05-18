@@ -227,9 +227,7 @@ function selectTile(){
     if (this.innerText != ""){
         return
     }
-    count = 0;
     
-
     let coords = this.id.split("-");
     let r = parseInt(coords[0]);
     let c = parseInt(coords[1]);
@@ -238,7 +236,9 @@ function selectTile(){
         if (solutionEasy[r][c] == numberSelected.id){
             this.innerText = numberSelected.id;
             count++;
-            if (count == 47){
+           
+            console.log(count);
+            if (count == 45){
                 popup.classList.remove("hide");
                 clearInterval(timer);
                 timer = null;
@@ -252,6 +252,8 @@ function selectTile(){
         if (solutionMedium[r][c] == numberSelected.id){
             this.innerText = numberSelected.id;
             count++;
+            console.log(count);
+            
             if (count == 52){
                 popup.classList.remove("hide");
                 clearInterval(timer);
@@ -264,7 +266,8 @@ function selectTile(){
     } else {
         if (solutionHard[r][c] == numberSelected.id){
             this.innerText = numberSelected.id;
-             count++;
+            count++;
+            console.log(count);
             if (count == 58){
                 popup.classList.remove("hide");
                 clearInterval(timer);
