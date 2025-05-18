@@ -238,7 +238,7 @@ function selectTile(){
             count++;
            
             console.log(count);
-            if (count == 45){
+            if (count == 47){
                 popup.classList.remove("hide");
                 clearInterval(timer);
                 timer = null;
