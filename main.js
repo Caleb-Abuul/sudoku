@@ -9,6 +9,11 @@ let home = document.getElementById("home");
 let homeBody = document.getElementById("home-body");
 let game = document.getElementById("game");
 let gameBody = document.getElementById("game-body");
+let popup = document.getElementById("popup");
+let solve = document.getElementById("solve-puzzle");
+let restartBtn = document.getElementById("restart");
+let homeBtn = document.getElementById("home-btn");
+let count = 0;
 
 let timer = null;
 let [hours, minutes, seconds] = [0, 0, 0];
@@ -16,9 +21,12 @@ let timerdisplay = document.getElementById("timer");
 let pauseBtn = document.getElementById("pause");
 let gameOver = false;
 
+solve.addEventListener("click", solvePuzzle);
 
 
-easyBtn.addEventListener("click", function(){
+easyBtn.addEventListener("click", startEasy);
+
+function startEasy(){
     level = "easy";
     homeBody.style.display = "none";
     gameBody.style.display = "block";
@@ -27,7 +35,7 @@ easyBtn.addEventListener("click", function(){
 
     setGame();
     startTimer();
-});
+}
 
 pauseBtn.addEventListener("click", function(){
     if (timer != null){
@@ -60,7 +68,9 @@ function startTimer(){
     }, 1000);
 }
 
-mediumBtn.addEventListener("click", function(){
+mediumBtn.addEventListener("click", startMedium);
+
+function startMedium(){
     level = "medium";
     homeBody.style.display = "none";
     gameBody.style.display = "block";
@@ -69,8 +79,11 @@ mediumBtn.addEventListener("click", function(){
 
     setGame();
     startTimer();
-});
-hardBtn.addEventListener("click", function(){
+}
+
+hardBtn.addEventListener("click", startHard);
+
+function startHard(){
     level = "hard";
     homeBody.style.display = "none";
     gameBody.style.display = "block";
@@ -79,7 +92,7 @@ hardBtn.addEventListener("click", function(){
 
     setGame();
     startTimer();
-});
+}
 
 let boardEasy = [
     "--74916--",
@@ -95,25 +108,25 @@ let boardEasy = [
 
 let boardMedium = [
     "--4-8---2",
-    "-2--17--3",
+    "-2--17---",
     "6-1---7--",
-    "-4---68-5",
-    "5--324--9",
-    "--65---47",
+    "-4----8-5",
+    "5--3-4--9",
+    "---5---47",
     "4-7-6-9-1",
-    "-6-8-1-7-",
-    "--2--95--"
+    "-6---1-7-",
+    "--2---5--"
 ]
 let boardHard = [
-    "--6---9--",
-    "4--1--2--",
-    "--2---1-3",
-    "3---2----",
-    "7----9--2",
-    "---4----7",
-    "----16---",
-    "8--9--6--",
-    "-7-8---4-"
+    "--3--2--4",
+    "--7---2--",
+    "-8---4--3",
+    "-6---5--9",
+    "-1---9-5-",
+    "5--4---6-",
+    "---2--7--",
+    "-3---7-2-",
+    "--6---9--"
 ]
 
 let solutionEasy = [
@@ -175,6 +188,7 @@ function setGame(){
                     tile.innerText = boardMedium[r][c];
                     tile.classList.add("tile-start");
                 }
+
             } else {
                 if (boardHard[r][c] != "-"){
                     tile.innerText = boardHard[r][c];
@@ -213,6 +227,7 @@ function selectTile(){
     if (this.innerText != ""){
         return
     }
+    count = 0;
     
 
     let coords = this.id.split("-");
@@ -222,6 +237,13 @@ function selectTile(){
     if (level == "easy"){
         if (solutionEasy[r][c] == numberSelected.id){
             this.innerText = numberSelected.id;
+            count++;
+            if (count == 47){
+                popup.classList.remove("hide");
+                clearInterval(timer);
+                timer = null;
+            }
+            
         } else {
             errors += 1;
             document.getElementById("errors").innerText = errors;
@@ -229,34 +251,96 @@ function selectTile(){
     } else if (level == "medium"){
         if (solutionMedium[r][c] == numberSelected.id){
             this.innerText = numberSelected.id;
+            count++;
+            if (count == 52){
+                popup.classList.remove("hide");
+                clearInterval(timer);
+                timer = null;
+            }
         } else {
             errors += 1;
             document.getElementById("errors").innerText = errors;
         }
     } else {
-        if (solutionMedium[r][c] == numberSelected.id){
+        if (solutionHard[r][c] == numberSelected.id){
             this.innerText = numberSelected.id;
+             count++;
+            if (count == 58){
+                popup.classList.remove("hide");
+                clearInterval(timer);
+                timer = null;
+            }
         } else {
             errors += 1;
             document.getElementById("errors").innerText = errors;
         }
     }
-
-    checkWin();
 }
 
-function checkWin(){
-   for (let r = 0; r < 9; r++){
-    for (let c = 0; c < 9; c++){
-        boardWin.append(boardEasy[r][c]);
+
+function solvePuzzle(){
+    let board = document.getElementById("board");
+    board.innerHTML = " ";
+    count = 0;
+    for (let r = 0; r < 9; r++){
+        for (let c = 0; c < 9; c++){
+            if (level == "easy"){
+                let tile = document.createElement("div");
+                tile.id = r.toString() + "-" + c.toString();
+                tile.classList.add("tile");
+                tile.classList.add("tile-start");
+                tile.innerText = solutionEasy[r][c];
+                board.append(tile);
+            } else if (level == "medium"){
+                let tile = document.createElement("div");
+                tile.id = r.toString() + "-" + c.toString();
+                tile.classList.add("tile");
+                tile.classList.add("tile-start");
+                tile.innerText = solutionMedium[r][c];
+                board.append(tile);
+            } else {
+                let tile = document.createElement("div");
+                tile.id = r.toString() + "-" + c.toString();
+                tile.classList.add("tile");
+                tile.classList.add("tile-start");
+                tile.innerText = solutionHard[r][c];
+                board.append(tile);
+            }
+        }
     }
-   }
-   if (boardWin = solutionEasy){
-    gameOver = true;
-    let popup = document.createElement("div");
-    popup.classList.add("win");
-    document.getElementById("game-body").append(popup);
-
-   }
+    clearInterval(timer);
+    popup.classList.remove("hide");
 }
+
+restartBtn.addEventListener("click", ()=>{
+    popup.classList.add("hide");
+    gameOver = false;
+    document.getElementById("board").innerHTML = " ";
+    [hours, minutes, seconds] = [0, 0, 0];
+    startTimer();
+    count = 0;
+
+    if (level == "easy"){
+        startEasy();
+    } else if (level == "medium"){
+        startMedium();
+    } else {
+        startHard();
+    }
+})
+
+homeBtn.addEventListener("click", ()=>{
+    popup.classList.add("hide");
+    gameOver = false;
+    clearInterval(timer);
+    timer = null;
+    document.getElementById("board").innerHTML = " ";
+    [hours, minutes, seconds] = [0, 0, 0];
+    document.getElementById("timer").innerText = "00:00:00";
+    homeBody.style.display = "block";
+    gameBody.style.display = "none";
+    game.style.display = "none";
+    home.style.display = "block";
+    count = 0;
+})
 

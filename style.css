@@ -9,6 +9,7 @@ body{
 header{
     width: 500px;
     margin: 0 auto;
+    z-index: 100;
 }
 hr{
     height: 2px;
@@ -19,6 +20,7 @@ h2{
     color: coral;
 }
 main{
+    z-index: 100;
     width: 500px;
     margin: 0 auto;
 }
@@ -72,14 +74,12 @@ main{
 .tile-start{
     background-color: #eee;
 }
-.hide{
-    display: none;
-}
+
 .home-body{
     margin: 2em auto;
 }
 .btns{
-    margin-top: 2em;
+    margin: 2em 0;
     display: flex;
     justify-content: space-around;
 }
@@ -99,24 +99,38 @@ button:active{
 }
 .menu{
     display: flex;
+    width: 400px;
+    margin: 0 auto;
     justify-content: space-between;
     align-items: center;
     & button{
         background-color: coral;
         color: white;
-        font-size: 1.2em;
+        font-size: 1em;
         padding: 0.25em;
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        margin: 0.25em 0;
+        margin: 0.35em 0;
     }
 }
-.win{
-    display: block;
+.popup{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    position: absolute;
+    top: 200px;
+    left: 380px;
     z-index: 1000;
     width: 500px;
-    height: 400px;
+    height: 300px;
+    margin: 0 auto;
     background-color: #fff;
-    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.5);
+
+}
+
+.hide{
+    display: none;
 }
